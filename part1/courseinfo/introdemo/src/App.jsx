@@ -1,3 +1,10 @@
+// render name of course
+
+// render course parts and number of exercises
+
+// render total number of exercises
+
+
 const App = () => {
   const course = 'Half Stack application development'
   const part1 = 'Fundamentals of React'
