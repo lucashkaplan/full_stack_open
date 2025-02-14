@@ -9,6 +9,7 @@ const Button = ({name, onClickFxn}) => {
 
 // comp to render statistics
 const Stastitics = ({good, neutral, bad}) => {
+  const total = good + neutral + bad
   return(
     <div>
       <h1>Statistics</h1>
@@ -16,6 +17,9 @@ const Stastitics = ({good, neutral, bad}) => {
         <li>Good: {good} </li>
         <li>Neutral: {neutral} </li>
         <li>Bad: {bad}</li>
+        <li>All: {total}</li>
+        <li>Average Score: {good - bad}</li>
+        <li>Percent Positive: {(good/total * 100).toFixed(2)}%</li>
       </p>
     </div>
   )
