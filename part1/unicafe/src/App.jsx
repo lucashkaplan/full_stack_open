@@ -10,6 +10,17 @@ const Button = ({name, onClickFxn}) => {
 // comp to render statistics
 const Stastitics = ({good, neutral, bad}) => {
   const total = good + neutral + bad
+  
+  // only show stastics if there are any reviews
+  if(total === 0){
+    return(
+      <div>
+        <h1>Statistics</h1>
+        <p>No feedback given</p>
+      </div>
+    )
+  }
+  
   return(
     <div>
       <h1>Statistics</h1>
@@ -18,7 +29,7 @@ const Stastitics = ({good, neutral, bad}) => {
         <li>Neutral: {neutral} </li>
         <li>Bad: {bad}</li>
         <li>All: {total}</li>
-        <li>Average Score: {good - bad}</li>
+        <li>Average Score: {((good - bad)/total).toFixed(2)}</li>
         <li>Percent Positive: {(good/total * 100).toFixed(2)}%</li>
       </p>
     </div>
