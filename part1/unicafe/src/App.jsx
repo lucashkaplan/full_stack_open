@@ -7,6 +7,9 @@ const Button = ({name, onClickFxn}) => {
   )
 }
 
+// render single statistic line
+const StatisticLine = ({text, value}) => <li>{text}: {value}</li>
+
 // comp to render statistics
 const Stastitics = ({good, neutral, bad}) => {
   const total = good + neutral + bad
@@ -25,12 +28,12 @@ const Stastitics = ({good, neutral, bad}) => {
     <div>
       <h1>Statistics</h1>
       <p>
-        <li>Good: {good} </li>
-        <li>Neutral: {neutral} </li>
-        <li>Bad: {bad}</li>
-        <li>All: {total}</li>
-        <li>Average Score: {((good - bad)/total).toFixed(2)}</li>
-        <li>Percent Positive: {(good/total * 100).toFixed(2)}%</li>
+        <StatisticLine text="Good" value={good} />
+        <StatisticLine text="Neutral" value={neutral} />
+        <StatisticLine text="Bad" value={bad} />
+        <StatisticLine text="All" value={total} />
+        <StatisticLine text="Average Score" value={((good - bad)/total).toFixed(2)} />
+        <StatisticLine text="Percent Positive" value={(good/total * 100).toFixed(2) + "%"} />
       </p>
     </div>
   )
