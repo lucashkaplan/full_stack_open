@@ -30,7 +30,7 @@ const App = () => {
       setPersons(persons.concat(personObject))
       setNewName('') // set name back to default
     } else {
-      console.log(`${newName} is already added to phonebook`);
+      console.log(`${newName} has already been added to phonebook`);
     }
   }
 
@@ -47,7 +47,10 @@ const App = () => {
         </div>
       </form>
       <h2>Numbers</h2>
-      ...
+      <ul>
+      {persons.map(person => 
+        <li key={person.name}>{person.name}</li>)}
+      </ul>
     </div>
   )
 }
