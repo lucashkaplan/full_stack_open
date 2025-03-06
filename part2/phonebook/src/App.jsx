@@ -30,7 +30,7 @@ const App = () => {
       setPersons(persons.concat(personObject))
       setNewName('') // set name back to default
     } else {
-      console.log(`${newName} has already been added to phonebook`);
+      alert(`${newName} has already been added to the phonebook`);
     }
   }
 
