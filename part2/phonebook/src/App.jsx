@@ -29,7 +29,13 @@ const PersonForm = ({addPerson, newName, handleNameChange, newNumber, handleNumb
   )
 }
 
-const PersonList = ({persons, filter}) => {
+const deleteButton = (id, handleDeletePerson) => {
+  return(
+    <button onClick={() => handleDeletePerson(id)}>delete</button>
+  )
+}
+
+const PersonList = ({persons, filter, handleDeletePerson}) => {
   // filter person list based on filter
   const filteredPersons = persons.filter(person => 
     person.name.toLowerCase().includes(filter.toLowerCase())
@@ -38,7 +44,10 @@ const PersonList = ({persons, filter}) => {
   return (
     <ul>
       {filteredPersons.map(person => 
-        <li key={person.name}>{person.name} : {person.number}</li>
+        <li key={person.name}>
+          {person.name} : {person.number}
+          {deleteButton(person.id, handleDeletePerson)}
+        </li>
       )}
     </ul>
   );
@@ -113,6 +122,20 @@ const App = () => {
     setFilter(event.target.value)
   }
 
+  // handler for deleting person
+  const handleDeletePerson = (id) => {
+    // confirm deletion
+    const personToDelete = persons.find(person => person.id === id)
+    const confirmDelete = window.confirm(`Delete ${personToDelete.name}?`)
+    if (!confirmDelete) return
+    
+    // delete person from local state
+    setPersons(persons.filter(person => person.id !== id))
+    console.log(`Deleted ${personToDelete.name} from local`)
+    // delete person from server
+    personServer.deletePerson(id)
+  }
+
   return (
     <div>
       <h2>Phonebook</h2>
@@ -126,7 +149,7 @@ const App = () => {
         handleNumberChange={handleNumberChange}
       />
       <h2>Numbers</h2>
-      <PersonList persons={persons} filter={filter}/>
+      <PersonList persons={persons} filter={filter} handleDeletePerson={handleDeletePerson}/>
     </div>
   )
 }

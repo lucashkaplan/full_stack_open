@@ -17,4 +17,13 @@ const addPerson = (person) => {
         })
 }
 
-export default { getAllPeople, addPerson }
+// delete person from server w/ DELETE request
+const deletePerson = (id) => {
+    return axios
+        .delete(`${baseUrl}/${id}`)
+        .then(response => {
+            console.log(`Deleted ${response.data.name} from server`)
+        })
+}
+
+export default { getAllPeople, addPerson, deletePerson }
