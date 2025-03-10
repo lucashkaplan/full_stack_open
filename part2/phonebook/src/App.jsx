@@ -29,7 +29,7 @@ const PersonForm = ({addPerson, newName, handleNameChange, newNumber, handleNumb
   )
 }
 
-const deleteButton = (id, handleDeletePerson) => {
+const deleteButton = (handleDeletePerson, id) => {
   return(
     <button onClick={() => handleDeletePerson(id)}>delete</button>
   )
@@ -46,7 +46,7 @@ const PersonList = ({persons, filter, handleDeletePerson}) => {
       {filteredPersons.map(person => 
         <li key={person.name}>
           {person.name} : {person.number}
-          {deleteButton(person.id, handleDeletePerson)}
+          {deleteButton(handleDeletePerson, person.id)}
         </li>
       )}
     </ul>
@@ -67,7 +67,7 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('')
   const [filter, setFilter] = useState('')
 
-  // get initial list of people from server on App render
+  // get list of people from server every time list of people changes
   useEffect(() => {
     personServer
       .getAllPeople()
@@ -96,7 +96,8 @@ const App = () => {
     // create a new person object
     const personObject = {
       name: newName,
-      number: newNumber
+      number: newNumber,
+      id: String(persons.length + 1)
     }
 
     // check if the person is already in the phonebook
@@ -104,7 +105,7 @@ const App = () => {
 
     // add person to phonebook if they're not already in it
     if (!personExists) {
-      console.log('Locally added person:', newName, newNumber)
+      console.log('Locally added person:', personObject)
       setPersons(persons.concat(personObject))
       // send person to server
       personServer.addPerson(personObject)
@@ -124,6 +125,8 @@ const App = () => {
 
   // handler for deleting person
   const handleDeletePerson = (id) => {
+    console.log("Attempting to delete person with ID: ", id)
+    
     // confirm deletion
     const personToDelete = persons.find(person => person.id === id)
     const confirmDelete = window.confirm(`Delete ${personToDelete.name}?`)
@@ -131,7 +134,6 @@ const App = () => {
     
     // delete person from local state
     setPersons(persons.filter(person => person.id !== id))
-    console.log(`Deleted ${personToDelete.name} from local`)
     // delete person from server
     personServer.deletePerson(id)
   }
