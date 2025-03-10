@@ -64,7 +64,7 @@ const App = () => {
       .get('http://localhost:3001/persons')
       .then(response => {
         setPersons(response.data)
-        console.log("Axios effect response: ", response)
+        console.log("Axios effect response for getting initial people: ", response)
       })
   }, [])
 
@@ -95,8 +95,15 @@ const App = () => {
 
     // add person to phonebook if they're not already in it
     if (!personExists) {
-      console.log('Added person:', newName, newNumber)
+      console.log('Locally added person:', newName, newNumber)
       setPersons(persons.concat(personObject))
+      // send person to server with POST request
+      axios
+        .post('http://localhost:3001/persons', personObject)
+        .then(response => {
+          console.log(`Sent ${response.data.name} to server`)
+        })
+      // reset state
       setNewName('') // set name back to default
       setNewNumber('') // set number back to default
       setFilter('') // reset filter
