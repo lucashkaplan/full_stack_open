@@ -17,9 +17,9 @@ const NameInput = ({newName, handleNameChange}) => {
   )
 }
 
-const PersonForm = ({addPerson, newName, handleNameChange, newNumber, handleNumberChange}) => {
+const PersonForm = ({handlePersonForm, newName, handleNameChange, newNumber, handleNumberChange}) => {
   return(
-    <form onSubmit={addPerson}>
+    <form onSubmit={handlePersonForm}>
       <NameInput newName={newName} handleNameChange={handleNameChange}/>
       <NumberInput newNumber={newNumber} handleNumberChange={handleNumberChange}/>
       <div>
@@ -61,11 +61,35 @@ const Filter = ({filter, handleFilterChange}) => {
   )
 }
 
+const Notification = ({message}) => {
+  const notifcationStyle = {
+    color: 'green',
+    background: 'lightgrey',
+    fontSize: 20,
+    borderStyle: 'solid',
+    borderRadius: 5,
+    padding: 10,
+    marginBottom: 10
+  }
+  
+  if (message == null){
+    return null
+  }
+
+  // if message exists, create div w/ message
+  return(
+    <div style={notifcationStyle}>
+      {message}
+    </div>
+  )
+}
+
 const App = () => {
   const [persons, setPersons] = useState([]) 
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [filter, setFilter] = useState('')
+  const [notificationMsg, setNotificationMsg] = useState(null)
 
   // get list of people from server every time list of people changes
   useEffect(() => {
@@ -88,8 +112,16 @@ const App = () => {
     setNewNumber(event.target.value)
   }
 
+  const createNotificationMsg = (message) => {
+    console.log("Notification message changed to:", message)
+    setNotificationMsg(message)
+    setTimeout(() => {
+      setNotificationMsg(null)
+    }, 5000)
+  }
+
   // event handler for form submission
-  const addPerson = (event) => {
+  const handlePersonForm = (event) => {
     // prevent the default form submission behavior
     event.preventDefault()
 
@@ -113,6 +145,7 @@ const App = () => {
       setNewName('') // set name back to default
       setNewNumber('') // set number back to default
       setFilter('') // reset filter
+      createNotificationMsg(`Added ${newName}`)
     } else {
       alert(`${newName} has already been added to the phonebook`);
     }
@@ -140,11 +173,12 @@ const App = () => {
 
   return (
     <div>
+      <Notification message={notificationMsg}/>
       <h2>Phonebook</h2>
       <Filter filter={filter} handleFilterChange={handleFilterChange}/>
       <h2>Add New</h2>
       <PersonForm 
-        addPerson={addPerson}
+        handlePersonForm={handlePersonForm}
         newName={newName}
         handleNameChange={handleNameChange}
         newNumber={newNumber}
