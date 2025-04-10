@@ -5,12 +5,12 @@ app.use(express.json());
 const fs = require('fs');
 
 // get info for all people in phonebook
-const personsJSON = JSON.parse(fs.readFileSync('./persons.json', 'utf8'));
+const persons = JSON.parse(fs.readFileSync('./persons.json', 'utf8'));
 
 // route to access all contacts
 app.get('/api/persons', (request, response) => {
-    if(personsJSON){
-        response.json(personsJSON);
+    if(persons){
+        response.json(persons);
     }
     else{
         response.status(404).json({ 
@@ -21,8 +21,8 @@ app.get('/api/persons', (request, response) => {
 
 app.get('/info', (request, response) => {
     // get number of people in phonebook
-    const numContacts = Array.isArray(personsJSON)
-        ? personsJSON.length
+    const numContacts = Array.isArray(persons)
+        ? persons.length
         : 0;
     
     // Get the current time
@@ -44,6 +44,25 @@ app.get('/info', (request, response) => {
     response.setHeader('Content-Type', 'text/html');
     response.send(htmlResponse);
 })
+
+// get individual person
+app.get('/api/persons/:id', (request, response) => {
+    const id = request.params.id
+    const person = persons.find(person => person.id === id)
+
+    if(person){
+        // if person exists, send 200
+        response.json(person)
+    }
+    else {
+        // if person does not exist, send 404
+        response.status(404).json({
+            'error': 'No person exists with ID ' + id
+        })
+    }
+})
+
+
 
 const PORT = 3001;
 // create server (listens for conections on port 3001)
