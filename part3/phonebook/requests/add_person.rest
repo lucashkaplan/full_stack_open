@@ -14,3 +14,19 @@ Content-Type: application/json
     "name": "Principal McDuffie",
     "number": "482628" 
 }
+
+### Test bad request - missing name
+POST http://localhost:3001/api/persons
+Content-Type: application/json
+
+{
+    "number": "482628" 
+}
+
+### Test bad request - missing number
+POST http://localhost:3001/api/persons
+Content-Type: application/json
+
+{
+    "name": "John" 
+}

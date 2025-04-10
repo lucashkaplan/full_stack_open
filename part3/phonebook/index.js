@@ -77,6 +77,8 @@ app.delete('/api/persons/:id', (request, response) => {
 app.post('/api/persons', (request, response) => {
     const body = request.body
 
+    // error catching
+    // person added must have number and unique name
     if (!body.name) {
         return response.status(400).json({ 
             error: 'name missing' 
@@ -85,6 +87,11 @@ app.post('/api/persons', (request, response) => {
     if (!body.number) {
         return response.status(400).json({ 
             error: 'number missing' 
+        })
+    }
+    if (persons.find(person => person.name === body.name)){
+        return response.status(400).json({
+            error: body.name + ' already exists in phonebook'
         })
     }
 
@@ -101,7 +108,6 @@ app.post('/api/persons', (request, response) => {
 
     response.json(person)
 })
-
 
 
 const PORT = 3001;
