@@ -5,7 +5,7 @@ app.use(express.json());
 const fs = require('fs');
 
 // get info for all people in phonebook
-const persons = JSON.parse(fs.readFileSync('./persons.json', 'utf8'));
+let persons = JSON.parse(fs.readFileSync('./persons.json', 'utf8'));
 
 // route to access all contacts
 app.get('/api/persons', (request, response) => {
@@ -60,6 +60,17 @@ app.get('/api/persons/:id', (request, response) => {
             'error': 'No person exists with ID ' + id
         })
     }
+})
+
+// route to delete phonebook entry
+app.delete('/api/persons/:id', (request, response) => {
+    const id = request.params.id
+    persons = persons.filter(person => person.id !== id)    
+
+    console.log("Removed person w/ ID", id)
+    
+    // respond w/ 204 no content
+    response.status(204).end()
 })
 
 
