@@ -5,7 +5,9 @@ app.use(express.json());
 const fs = require('fs');
 
 // get info for all people in phonebook
-let persons = JSON.parse(fs.readFileSync('./persons.json', 'utf8'));
+let personsJSON = JSON.parse(fs.readFileSync('./persons.json', 'utf8'));
+// convert to array if not already
+let persons = Array.isArray(personsJSON) ? personsJSON : Object.values(personsJSON);
 
 // route to access all contacts
 app.get('/api/persons', (request, response) => {
@@ -21,9 +23,7 @@ app.get('/api/persons', (request, response) => {
 
 app.get('/info', (request, response) => {
     // get number of people in phonebook
-    const numContacts = Array.isArray(persons)
-        ? persons.length
-        : 0;
+    const numContacts = persons.length
     
     // Get the current time
     const requestTime = new Date().toLocaleString();
@@ -71,6 +71,35 @@ app.delete('/api/persons/:id', (request, response) => {
     
     // respond w/ 204 no content
     response.status(204).end()
+})
+
+// add person to phonebook
+app.post('/api/persons', (request, response) => {
+    const body = request.body
+
+    if (!body.name) {
+        return response.status(400).json({ 
+            error: 'name missing' 
+        })
+    }
+    if (!body.number) {
+        return response.status(400).json({ 
+            error: 'number missing' 
+        })
+    }
+
+    // generate random ID
+    const generateID = () => Number(Math.round(Math.random() * persons.length * 100))
+
+    const person = {
+        id: generateID(),
+        name: body.name,
+        number: body.number
+    }
+
+    persons = persons.concat(person)
+
+    response.json(person)
 })
 
 

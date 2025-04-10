@@ -1,0 +1,16 @@
+POST http://localhost:3001/api/persons
+Content-Type: application/json
+
+{
+    "name": "Jeffery Bezos",
+    "number": "919-249-0102" 
+}
+
+###
+POST http://localhost:3001/api/persons
+Content-Type: application/json
+
+{
+    "name": "Principal McDuffie",
+    "number": "482628" 
+}
