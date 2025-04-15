@@ -1,8 +1,15 @@
 const express = require('express');
 // create express app and store in app var
 const app = express();
-app.use(express.json());
+
 const fs = require('fs');
+const morgan = require('morgan');
+
+// middleware
+app.use(express.json());
+// for each HTTP request, tiny option will output:
+// :method :url :status :res[content-length] - :response-time ms
+app.use(morgan('tiny'));
 
 // get info for all people in phonebook
 let personsJSON = JSON.parse(fs.readFileSync('./persons.json', 'utf8'));
