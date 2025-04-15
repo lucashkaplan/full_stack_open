@@ -5,11 +5,18 @@ const app = express();
 const fs = require('fs');
 const morgan = require('morgan');
 
+// define custom token to show request body
+morgan.token('body', (req, res) => {
+    // convert request body (JavaScript obj) to JSON string
+    return JSON.stringify(req.body);
+});
+
 // middleware
 app.use(express.json());
 // for each HTTP request, tiny option will output:
-// :method :url :status :res[content-length] - :response-time ms
-app.use(morgan('tiny'));
+// :method :url :status :res[content-length] - :response-time ms :body
+// :body defined in custom morgan token
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'));
 
 // get info for all people in phonebook
 let personsJSON = JSON.parse(fs.readFileSync('./persons.json', 'utf8'));
