@@ -111,8 +111,11 @@ app.post('/api/persons', (request, response) => {
         })
     }
 
-    // generate random ID
-    const generateID = () => Number(Math.round(Math.random() * persons.length * 100))
+    // generate random ID > # of people in phonebook
+    const generateID = () => {
+        const random_val = Math.random() * persons.length * 100
+        return String(Math.round(random_val) + persons.length)
+    }
 
     const person = {
         id: generateID(),
