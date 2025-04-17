@@ -1,7 +1,7 @@
 import axios from 'axios'
 
-// base URL for JSON server
-const baseUrl = 'http://localhost:3001/persons'
+// base URL for backend server storing persons JSON
+const baseUrl = '/api/persons'
 
 // get initial list of people from server
 const getAllPeople = () => {
