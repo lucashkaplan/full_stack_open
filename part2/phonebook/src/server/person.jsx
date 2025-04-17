@@ -12,9 +12,8 @@ const getAllPeople = () => {
 const addPerson = (person) => {
     return axios
         .post(baseUrl, person)
-        .then(response => {
-            console.log(`Sent ${response.data.name} to server`)
-        })
+        // return full person object
+        .then(response => response.data);
 }
 
 // delete person from server w/ DELETE request

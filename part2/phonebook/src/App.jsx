@@ -128,8 +128,7 @@ const App = () => {
     // create a new person object
     const personObject = {
       name: newName,
-      number: newNumber,
-      id: String(persons.length + 1)
+      number: newNumber
     }
 
     // check if the person is already in the phonebook
@@ -137,15 +136,21 @@ const App = () => {
 
     // add person to phonebook if they're not already in it
     if (!personExists) {
-      console.log('Locally added person:', personObject)
-      setPersons(persons.concat(personObject))
-      // send person to server
-      personServer.addPerson(personObject)
-      // reset state
-      setNewName('') // set name back to default
-      setNewNumber('') // set number back to default
-      setFilter('') // reset filter
-      createNotificationMsg(`Added ${newName}`)
+      personServer
+        .addPerson(personObject)
+        .then(returnedPerson => {
+          // update state w/ person obj returned from backend
+          setPersons(persons.concat(returnedPerson))
+          // reset state
+          setNewName('') // set name back to default
+          setNewNumber('') // set number back to default
+          setFilter('') // reset filter
+          createNotificationMsg(`Added ${returnedPerson.name}!`)
+        })
+        .catch(error => {
+          console.error(`Error adding person ${newName}:`, error)
+          createNotificationMsg('Failed to add person. Please try again.');
+        })
     } else {
       alert(`${newName} has already been added to the phonebook`);
     }
