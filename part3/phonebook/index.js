@@ -11,12 +11,14 @@ morgan.token('body', (req, res) => {
     return JSON.stringify(req.body);
 });
 
-// middleware
+/* MIDDLEWARE */
 app.use(express.json());
 // for each HTTP request, tiny option will output:
 // :method :url :status :res[content-length] - :response-time ms :body
 // :body defined in custom morgan token
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'));
+// serve static files (React frontend) stored in dist folder
+app.use(express.static('dist'))
 
 // get info for all people in phonebook
 let personsJSON = JSON.parse(fs.readFileSync('./persons.json', 'utf8'));
