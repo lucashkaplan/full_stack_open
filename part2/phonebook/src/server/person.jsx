@@ -20,8 +20,8 @@ const addPerson = (person) => {
 const deletePerson = (id) => {
     return axios
         .delete(`${baseUrl}/${id}`)
-        .then(response => {
-            console.log(`Deleted ${response.data.name} from server`)
+        .then(() => {
+            console.log(`Deleted person with ID = ${id} from server`)
         })
 }
 

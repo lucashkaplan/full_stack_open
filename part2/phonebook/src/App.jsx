@@ -146,6 +146,7 @@ const App = () => {
           setNewNumber('') // set number back to default
           setFilter('') // reset filter
           createNotificationMsg(`Added ${returnedPerson.name}!`)
+          console.log('Added person: ', returnedPerson)
         })
         .catch(error => {
           console.error(`Error adding person ${newName}:`, error)
