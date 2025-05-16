@@ -9,7 +9,8 @@ The frontend was developed in React and the backend was developed using Node.js 
 ## Current Status
 The frontend and backend have been integrated. The frontend code is built into a production
 environment and served via the backend server. The application was deployed using Fly.io,
-and can be found at: https://phonebook-f-s-o.fly.dev.
+and can be found at: https://phonebook-f-s-o.fly.dev. Currently, the deployment is unavailable,
+and the application should be run locally.
 
 To run the application locally, follow these steps:
 - Build the production version of the frontend
@@ -18,6 +19,6 @@ To run the application locally, follow these steps:
 - Copy this to the backend
     - `cd ../../part3/phonebook`
     - `cp -r ../../part2/phonebook/dist/ ./`
-- Run the backend server (which serves the frontend):
+- Run the backend server (which serves the frontend as well):
     - `npm run dev`
-
+- Open the application at: http://localhost:3001/
