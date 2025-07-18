@@ -21,9 +21,9 @@ const peopleSchema = new mongoose.Schema({
 // JSON representation of contacts
 peopleSchema.set('toJSON', {
     transform: (_, returnedObj) => {
-        returnedObject.id = returnedObject._id.toString()
-        delete returnedObject._id
-        delete returnedObject.__v
+        returnedObj.id = returnedObj._id.toString()
+        delete returnedObj._id
+        delete returnedObj.__v
     }
 })
 
