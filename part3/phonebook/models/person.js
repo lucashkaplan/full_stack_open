@@ -1,0 +1,30 @@
+const mongoose = require('mongoose')
+mongoose.set('strictQuery', false)
+const url = process.env.MONGODB_URI
+
+// Set up connection to MongoDB
+console.log('connecting to', url)
+mongoose.connect(url)
+  .then(result => {
+    console.log('Connected to MongoDB')
+  })
+  .catch(error => {
+    console.log('Error connecting to MongoDB:', error.message)
+  })
+
+// define schema for phonebook app
+const peopleSchema = new mongoose.Schema({
+    name: String,
+    number: String
+})
+
+// JSON representation of contacts
+personSchema.set('toJSON', {
+    transform: (_, returnedObj) => {
+        returnedObject.id = returnedObject._id.toString()
+        delete returnedObject._id
+        delete returnedObject.__v
+    }
+})
+
+module.exports = mongoose.model('Person', peopleSchema)
