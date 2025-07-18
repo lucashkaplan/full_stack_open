@@ -13,7 +13,7 @@ morgan.token('body', (req, res) => {
     return JSON.stringify(req.body);
 });
 
-// import DB schema
+// import DB model
 const Person = require('./models/person')
 
 /* MIDDLEWARE */
@@ -31,23 +31,19 @@ let personsJSON = JSON.parse(fs.readFileSync('./persons.json', 'utf8'));
 let persons = Array.isArray(personsJSON) ? personsJSON : Object.values(personsJSON);
 
 // route to access all contacts
-app.get('/api/persons', (request, response) => {
-    if(persons){
-        response.json(persons);
-    }
-    else{
-        response.status(404).json({ 
-            error: 'content missing' 
-        });
-    }
+app.get('/api/persons', (_, response) => {
+    Person.find({}).then(contact => {
+        response.json(contact)
+    })
 })
 
-app.get('/info', (request, response) => {
-    // get number of people in phonebook
-    const numContacts = persons.length
-    
+// route to get info about DB
+app.get('/info', async (_, response) => {
     // Get the current time
     const requestTime = new Date().toLocaleString();
+    
+    // get number of people in phonebook
+    const numContacts = await Person.countDocuments({});
 
     // html response
     const htmlResponse = `
@@ -69,15 +65,15 @@ app.get('/info', (request, response) => {
 // get individual person
 app.get('/api/persons/:id', (request, response) => {
     const id = request.params.id
-    Person.findById(id).then(person => {
-        response.json(person)
+    Person.findById(id).then(contact => {
+        response.json(contact)
     })
 })
 
 // route to delete phonebook entry
-app.delete('/api/persons/:id', (request, response) => {
+app.delete('/api/persons/:id', async (request, response) => {
     const id = request.params.id
-    persons = persons.filter(person => person.id !== id)    
+    await Person.findByIdAndDelete(id)
 
     console.log("Removed person w/ ID", id)
     
