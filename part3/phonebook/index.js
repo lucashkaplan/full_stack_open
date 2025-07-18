@@ -1,15 +1,20 @@
-const express = require('express');
+// use environment variables for configuration
+require('dotenv').config()
+
 // create express app and store in app var
+const express = require('express');
 const app = express();
 
 const fs = require('fs');
 const morgan = require('morgan');
-
 // define custom token to show request body
 morgan.token('body', (req, res) => {
     // convert request body (JavaScript obj) to JSON string
     return JSON.stringify(req.body);
 });
+
+// import DB schema
+const Person = require('./models/person')
 
 /* MIDDLEWARE */
 app.use(express.json());
@@ -64,18 +69,9 @@ app.get('/info', (request, response) => {
 // get individual person
 app.get('/api/persons/:id', (request, response) => {
     const id = request.params.id
-    const person = persons.find(person => person.id === id)
-
-    if(person){
-        // if person exists, send 200
+    Person.findById(id).then(person => {
         response.json(person)
-    }
-    else {
-        // if person does not exist, send 404
-        response.status(404).json({
-            'error': 'No person exists with ID ' + id
-        })
-    }
+    })
 })
 
 // route to delete phonebook entry
@@ -129,7 +125,7 @@ app.post('/api/persons', (request, response) => {
 })
 
 
-const PORT = 3001;
+const PORT = process.env.PORT;
 // create server (listens for conections on port 3001)
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
