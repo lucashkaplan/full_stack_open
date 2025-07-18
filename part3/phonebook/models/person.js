@@ -1,3 +1,6 @@
+/* This file sets up the connection b/w the backend server and the Persons DB in MongoDB.
+*/
+
 const mongoose = require('mongoose')
 mongoose.set('strictQuery', false)
 const url = process.env.MONGODB_URI
