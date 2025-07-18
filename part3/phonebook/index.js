@@ -14,7 +14,7 @@ morgan.token('body', (req, res) => {
 });
 
 // import DB model
-const Person = require('./models/person')
+const PeopleModel = require('./models/person')
 
 /* MIDDLEWARE */
 app.use(express.json());
@@ -25,14 +25,9 @@ app.use(morgan(':method :url :status :res[content-length] - :response-time ms :b
 // serve static files (React frontend) stored in dist folder
 app.use(express.static('dist'))
 
-// get info for all people in phonebook
-let personsJSON = JSON.parse(fs.readFileSync('./persons.json', 'utf8'));
-// convert to array if not already
-let persons = Array.isArray(personsJSON) ? personsJSON : Object.values(personsJSON);
-
 // route to access all contacts
 app.get('/api/persons', (_, response) => {
-    Person.find({}).then(contact => {
+    PeopleModel.find({}).then(contact => {
         response.json(contact)
     })
 })
@@ -43,7 +38,7 @@ app.get('/info', async (_, response) => {
     const requestTime = new Date().toLocaleString();
     
     // get number of people in phonebook
-    const numContacts = await Person.countDocuments({});
+    const numContacts = await PeopleModel.countDocuments({});
 
     // html response
     const htmlResponse = `
@@ -65,7 +60,7 @@ app.get('/info', async (_, response) => {
 // get individual person
 app.get('/api/persons/:id', (request, response) => {
     const id = request.params.id
-    Person.findById(id).then(contact => {
+    PeopleModel.findById(id).then(contact => {
         response.json(contact)
     })
 })
@@ -73,7 +68,7 @@ app.get('/api/persons/:id', (request, response) => {
 // route to delete phonebook entry
 app.delete('/api/persons/:id', async (request, response) => {
     const id = request.params.id
-    await Person.findByIdAndDelete(id)
+    await PeopleModel.findByIdAndDelete(id)
 
     console.log("Removed person w/ ID", id)
     
@@ -86,7 +81,7 @@ app.post('/api/persons', (request, response) => {
     const body = request.body
 
     // error catching
-    // person added must have number and unique name
+    // person added must have name and number
     if (!body.name) {
         return response.status(400).json({ 
             error: 'name missing' 
@@ -97,27 +92,13 @@ app.post('/api/persons', (request, response) => {
             error: 'number missing' 
         })
     }
-    if (persons.find(person => person.name === body.name)){
-        return response.status(400).json({
-            error: body.name + ' already exists in phonebook'
-        })
-    }
 
-    // generate random ID > # of people in phonebook
-    const generateID = () => {
-        const random_val = Math.random() * persons.length * 100
-        return String(Math.round(random_val) + persons.length)
-    }
-
-    const person = {
-        id: generateID(),
+    PeopleModel.create({
         name: body.name,
         number: body.number
-    }
-
-    persons = persons.concat(person)
-
-    response.json(person)
+    }).then(
+        person => response.status(201).json(person)
+    )
 })
 
 
