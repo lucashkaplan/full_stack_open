@@ -58,22 +58,25 @@ app.get('/info', async (_, response) => {
 })
 
 // get individual person
-app.get('/api/persons/:id', (request, response) => {
+app.get('/api/persons/:id', (request, response, next) => {
     const id = request.params.id
     PeopleModel.findById(id).then(contact => {
         response.json(contact)
     })
+    .catch(error => next(error))
 })
 
 // route to delete phonebook entry
-app.delete('/api/persons/:id', async (request, response) => {
+app.delete('/api/persons/:id', (request, response, next) => {
     const id = request.params.id
-    await PeopleModel.findByIdAndDelete(id)
-
-    console.log("Removed person w/ ID", id)
     
     // respond w/ 204 no content
-    response.status(204).end()
+    PeopleModel.findByIdAndDelete(id)
+    .then(_ => {
+        console.log("Removed person w/ ID", id)
+        response.status(204).end()
+    })
+    .catch(error => next(error))
 })
 
 // add person to phonebook
@@ -101,6 +104,13 @@ app.post('/api/persons', (request, response) => {
     )
 })
 
+// Error handler middleware
+const errorHandler = (error, request, response, next) => {
+    console.error(error.message)
+
+    next(error)
+}
+app.use(errorHandler)
 
 const PORT = process.env.PORT;
 // create server (listens for conections on port 3001)
