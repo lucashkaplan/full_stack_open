@@ -4,6 +4,7 @@ This repo contains the code for the projects developed through the Full Stack Op
 The primary project is a phonebook application that allows users to view their contacts
 (name, number pairs), add a new contact, delete a contact, and filter contacts.
 The frontend was developed in React and the backend was developed using Node.js and Express.
+Phonebook data is stored in MongoDB.
 The frotend is stored in part2/phonebook and the backend is stored in part3/phonebook.
 
 
