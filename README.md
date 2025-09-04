@@ -7,14 +7,25 @@ The frontend was developed in React and the backend was developed using Node.js 
 Phonebook data is stored in MongoDB.
 The frotend is stored in part2/phonebook and the backend is stored in part3/phonebook.
 
+## Database Schema
+### People Table
+| Field | Type |
+|-------|------|
+| Name | String |
+| Number | String |
+| _id | ObjectId |
 
 ## Current Status
 The frontend and backend have been integrated. The frontend code is built into a production
 environment and served via the backend server. The application was deployed using Fly.io,
-and can be found at: https://phonebook-f-s-o.fly.dev. Currently, the deployment is unavailable,
+and can be found at: https://phonebook-f-s-o.fly.dev. Currently, the deployment is not running,
 and the application should be run locally.
 
+### Running the Site
 To run the application locally, follow these steps:
+- Define a .env file in the home directory of the repo. Include the following variables:
+    - `MONGODB_URI`: The URI used to connect to your MongoDB database. Ensure that you have a table named "people" that matches the schema defined above.
+    - `PORT`: The port the application will run on.
 - Build the production version of the frontend
     - `cd ~/part2/phonebook`
     - `npm run build`
