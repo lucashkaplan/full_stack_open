@@ -8,7 +8,7 @@ const url = process.env.MONGODB_URI
 // Set up connection to MongoDB
 console.log('connecting to', url)
 mongoose.connect(url)
-  .then(result => {
+  .then(() => {
     console.log('Connected to MongoDB')
   })
   .catch(error => {
@@ -17,17 +17,17 @@ mongoose.connect(url)
 
 // define schema for phonebook app
 const peopleSchema = new mongoose.Schema({
-    name: String,
-    number: String
+  name: String,
+  number: String
 })
 
 // JSON representation of contacts
 peopleSchema.set('toJSON', {
-    transform: (_, returnedObj) => {
-        returnedObj.id = returnedObj._id.toString()
-        delete returnedObj._id
-        delete returnedObj.__v
-    }
+  transform: (_, returnedObj) => {
+    returnedObj.id = returnedObj._id.toString()
+    delete returnedObj._id
+    delete returnedObj.__v
+  }
 })
 
 module.exports = mongoose.model('Person', peopleSchema)

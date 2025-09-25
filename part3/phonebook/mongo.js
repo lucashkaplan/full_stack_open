@@ -4,11 +4,11 @@
 
 const mongoose = require('mongoose')
 
-if (!((process.argv.length == 5) || (process.argv.length == 3))) {
+if (!((process.argv.length === 5) || (process.argv.length === 3))) {
   console.log('Program call should be either: \n \
     node mongo.js password "name" number \n \
     node mongo.js password'
-    )
+  )
   console.log('NOTE: If name contains whitespace, it must be enclosed in quotes')
   process.exit(1)
 }
@@ -24,37 +24,37 @@ mongoose.connect(url)
 
 // define schema for phonebook app
 const personSchema = new mongoose.Schema({
-    name: String,
-    number: String
+  name: String,
+  number: String
 })
 
 const Contact = mongoose.model('Person', personSchema)
 
 // display all contacts
-if (process.argv.length == 3){
-    Contact.find({}).then(
-        result => {
-            result.forEach(contact => {
-                console.log(contact)
-            })
+if (process.argv.length === 3){
+  Contact.find({}).then(
+    result => {
+      result.forEach(contact => {
+        console.log(contact)
+      })
 
-            mongoose.connection.close()
-        }
-    )
+      mongoose.connection.close()
+    }
+  )
 }
 
 // add new contact
-if (process.argv.length == 5){
-    // create contact
-    const newContact = new Contact({
-        name: process.argv[3],
-        number: process.argv[4]
-    })
+if (process.argv.length === 5){
+  // create contact
+  const newContact = new Contact({
+    name: process.argv[3],
+    number: process.argv[4]
+  })
 
-    // save to DB
-    newContact.save().then(result => {
-        console.log("New contact added!")
-        console.log(`name: ${process.argv[3]} | number: ${process.argv[4]}`)
-        mongoose.connection.close()
-    })
+  // save to DB
+  newContact.save().then(() => {
+    console.log('New contact added!')
+    console.log(`name: ${process.argv[3]} | number: ${process.argv[4]}`)
+    mongoose.connection.close()
+  })
 }
