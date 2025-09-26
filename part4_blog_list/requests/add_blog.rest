@@ -1,0 +1,9 @@
+POST http://localhost:3001/api/blogs
+Content-Type: application/json
+
+{
+    "title": "You Might Not Need an Effect",
+    "author": "React Team",
+    "url": "https://react.dev/learn/you-might-not-need-an-effect",
+    "likes": 1
+}
